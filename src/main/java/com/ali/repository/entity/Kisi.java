@@ -3,6 +3,7 @@ package com.ali.repository.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,6 +18,6 @@ public class Kisi {
     Long id;
     String ad;
     String soyad;
-    @ManyToOne(cascade = CascadeType.ALL)
-    Kiralama kiralamaKisi;
+    @OneToMany(mappedBy = "kisi")
+    List<Kiralama> kiralamaKisi;
 }

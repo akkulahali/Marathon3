@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Builder
@@ -18,7 +19,8 @@ public class Arac {
     Long id;
     String marka;
     String model;
-    boolean musaitmi;
-    @ManyToOne(cascade = CascadeType.ALL)
-    Kiralama kiralamaArac;
+    @Builder.Default()
+    boolean musaitmi = true;
+    @OneToMany(mappedBy = "arac")
+    List<Kiralama> kiralamaArac;
 }

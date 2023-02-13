@@ -16,8 +16,10 @@ public class Kiralama {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @OneToMany(mappedBy = "kiralamaArac")
-    List<Arac> aracList;
-    @OneToMany(mappedBy = "kiralamaKisi")
-    List<Kisi> kisiList;
+    @Builder.Default
+    boolean kiralamaAktifmi = true;
+    @OneToOne()
+    Arac arac;
+    @OneToOne()
+    Kisi kisi;
 }
