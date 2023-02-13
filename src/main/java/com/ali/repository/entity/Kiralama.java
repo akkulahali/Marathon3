@@ -16,6 +16,8 @@ public class Kiralama {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @OneToMany(mappedBy = "kiralama")
+    @OneToMany(mappedBy = "kiralamaArac")
     List<Arac> aracList;
+    @OneToMany(mappedBy = "kiralamaKisi")
+    List<Kisi> kisiList;
 }

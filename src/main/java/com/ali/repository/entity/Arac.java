@@ -20,5 +20,5 @@ public class Arac {
     String model;
     boolean musaitmi;
     @ManyToOne(cascade = CascadeType.ALL)
-    Kiralama kiralama;
+    Kiralama kiralamaArac;
 }

@@ -3,7 +3,7 @@ package com.ali;
 import com.ali.repository.entity.Arac;
 import com.ali.service.AracService;
 
-public class Main {
+public class KiralamaApp {
     public static void main(String[] args) {
         Arac arac = Arac.builder()
                 .marka("BMW")

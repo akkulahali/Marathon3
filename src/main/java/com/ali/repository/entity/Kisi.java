@@ -17,4 +17,6 @@ public class Kisi {
     Long id;
     String ad;
     String soyad;
+    @ManyToOne(cascade = CascadeType.ALL)
+    Kiralama kiralamaKisi;
 }
