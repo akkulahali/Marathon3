@@ -7,7 +7,10 @@ import com.ali.service.AracService;
 import com.ali.service.KiralamaService;
 import com.ali.service.KisiService;
 
+import java.util.List;
 import java.util.Scanner;
+
+import static com.ali.KiralamaApp.*;
 
 public class KiralamaController {
     private Scanner scanner;
@@ -47,16 +50,20 @@ public class KiralamaController {
         do{
             kiralamaService.findAll().forEach(k->{
                 if(k.isKiralamaAktifmi()){
-                    System.out.println("Kiralama id.......: " + k.getId());
-                    System.out.println("Kiralayan kisi....: Id -> " + k.getKisi().getId() + " Ad -> " + k.getKisi().getAd() + " Soyad -> " + k.getKisi().getSoyad());
-                    System.out.println("Kiralanan arac....: Id -> " + k.getArac().getId() + " Marka -> " + k.getArac().getMarka() + " Model -> " +  k.getArac().getModel());
+                    System.out.println("Kiralama id.......: -> " + k.getId());
+                    System.out.println("Kiralayan kisi id.: -> " + k.getKisiId());
+                    System.out.println("Kiralanan arac id.: -> " + k.getAracId());
                     System.out.println("------------------------------------");
                 }
             });
             System.out.println("Bitirilecek kiralama id'sini giriniz.");
-            Long kiralamaId = Long.parseLong(ifade());
-            if(kiralamaService.findById(kiralamaId).get().isKiralamaAktifmi()){
-                kiralamaService.findById(kiralamaId).get().setKiralamaAktifmi(false);
+            Kiralama kiralama = kiralamaService.findById(Long.parseLong(ifade())).get();
+            Arac arac = aracService.findById(kiralama.getAracId()).get();
+            if(kiralama.isKiralamaAktifmi()){
+                kiralama.setKiralamaAktifmi(false);
+                kiralamaService.update(kiralama);
+                arac.setMusaitmi(true);
+                aracService.update(arac);
                 control = false;
             }else {
                 System.out.println("Lutfen sonlanmamis kiralama id'si seciniz.");
@@ -66,9 +73,9 @@ public class KiralamaController {
 
     private void listKiralama() {
         kiralamaService.findAll().forEach(k->{
-            System.out.println("Kiralama id.......: " + k.getId());
-            System.out.println("Kiralayan kisi....: Id -> " + k.getKisi().getId() + " Ad -> " + k.getKisi().getAd() + " Soyad -> " + k.getKisi().getSoyad());
-            System.out.println("Kiralanan arac....: Id -> " + k.getArac().getId() + " Marka -> " + k.getArac().getMarka() + " Model -> " +  k.getArac().getModel());
+            System.out.println("Kiralama id.......: -> " + k.getId());
+            System.out.println("Kiralayan kisi id.: -> " + k.getKisiId());
+            System.out.println("Kiralanan arac id.: -> " + k.getAracId());
             System.out.println("------------------------------------");
         });
     }
@@ -97,15 +104,15 @@ public class KiralamaController {
                 }
             });
             System.out.println("Arac id'sini giriniz.");
-            Long aracid = Long.parseLong(ifade());
-            if (aracService.findById(aracid).get().isMusaitmi()) {
-                Arac arac = aracService.findById(aracid).get();
+            Arac arac = aracService.findById(Long.parseLong(ifade())).get();
+            if (arac.isMusaitmi()) {
                 Kiralama kiralama = Kiralama.builder()
-                        .arac(arac)
-                        .kisi(kisi)
+                        .aracId(arac.getId())
+                        .kisiId(kisi.getId())
                         .build();
                 kiralamaService.save(kiralama);
                 arac.setMusaitmi(false);
+                aracService.update(arac);
                 control = false;
             }else {
                 System.out.println("Lutfen musait olan arac id'si seciniz.");
@@ -116,5 +123,64 @@ public class KiralamaController {
     private String ifade(){
         this.scanner = new Scanner(System.in);
         return scanner.nextLine();
+    }
+
+    public void raporMenu() {
+        int secim;
+        Scanner scanner = new Scanner(System.in);
+        do{
+            System.out.println("******************************************");
+            System.out.println("**********     RAPOR MENUSU     **********");
+            System.out.println("******************************************");
+            System.out.println();
+            System.out.println("1- Kiradaki Araclari Listele");
+            System.out.println("2- Bostaki Araclari Listele");
+            System.out.println("3- Musterinin Kiraladigi Araclari Listele");
+            System.out.println("0- CIKIS YAP");
+            System.out.print("Seciniz....: ");
+            secim = scanner.nextInt();
+            switch (secim){
+                case 1: suAnKiradaOlanAraclar(); break;
+                case 2: bostakiAraclar(); break;
+                case 3: musterininKiraladigiAraclar(); break;
+            }
+        }while (secim!=0);
+    }
+
+    private void musterininKiraladigiAraclar() {
+        kisiService.findAll().forEach(k->{
+            System.out.println("Kisi id.......: " + k.getId());
+            System.out.println("Kisi adi......: " + k.getAd());
+            System.out.println("Kisi soyadi...: " + k.getSoyad());
+            System.out.println("------------------------------------");
+        });
+        System.out.println("Kişi id'sini giriniz.");
+        aracService.musterininKiraladigiAraclar(kiralamaService.musterininKiraladigiAraclar(Long.parseLong(ifade()))).forEach(a->{
+            System.out.println(a);
+        });
+    }
+
+    private void bostakiAraclar() {
+        aracService.findAll().forEach(a->{
+            if(a.isMusaitmi()) {
+                System.out.println("Arac id.......: " + a.getId());
+                System.out.println("Arac marka....: " + a.getMarka());
+                System.out.println("Arac model....: " + a.getModel());
+                System.out.println("Arac müsait mi: " + a.isMusaitmi());
+                System.out.println("------------------------------------");
+            }
+        });
+    }
+
+    private void suAnKiradaOlanAraclar() {
+        aracService.findAll().forEach(a->{
+            if(!a.isMusaitmi()) {
+                System.out.println("Arac id.......: " + a.getId());
+                System.out.println("Arac marka....: " + a.getMarka());
+                System.out.println("Arac model....: " + a.getModel());
+                System.out.println("Arac müsait mi: " + a.isMusaitmi());
+                System.out.println("------------------------------------");
+            }
+        });
     }
 }

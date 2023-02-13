@@ -21,6 +21,4 @@ public class Arac {
     String model;
     @Builder.Default()
     boolean musaitmi = true;
-    @OneToMany(mappedBy = "arac")
-    List<Kiralama> kiralamaArac;
 }

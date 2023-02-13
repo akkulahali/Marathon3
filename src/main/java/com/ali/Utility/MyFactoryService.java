@@ -1,8 +1,10 @@
 package com.ali.Utility;
 
+import lombok.Getter;
+
 import java.util.List;
 import java.util.Optional;
-
+@Getter
 public class MyFactoryService<R extends MyFactoryRepository,T,ID> implements IService<T,ID> {
     R repository;
     public MyFactoryService(R repository){
@@ -12,6 +14,11 @@ public class MyFactoryService<R extends MyFactoryRepository,T,ID> implements ISe
     @Override
     public <S extends T> S save(S entity) {
         repository.save(entity);
+        return entity;
+    }
+
+    public <S extends T> S update(S entity) {
+        repository.update(entity);
         return entity;
     }
 

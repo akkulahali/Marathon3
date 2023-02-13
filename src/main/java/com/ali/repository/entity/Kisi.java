@@ -18,6 +18,4 @@ public class Kisi {
     Long id;
     String ad;
     String soyad;
-    @OneToMany(mappedBy = "kisi")
-    List<Kiralama> kiralamaKisi;
 }

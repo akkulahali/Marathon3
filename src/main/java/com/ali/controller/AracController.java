@@ -22,14 +22,29 @@ public class AracController {
             System.out.println("");
             System.out.println("1- Arac Kaydet");
             System.out.println("2- Tum Araclari Goster");
+            System.out.println("3- Arac Arama");
             System.out.println("0- <<< Geri Dön");
             System.out.println("Seçiniz......: ");
             secim = Integer.parseInt(ifade());
             switch (secim){
                 case 1: createArac(); break;
                 case 2: listArac(); break;
+                case 3: findArac(); break;
             }
         }while(secim!=0);
+    }
+
+    private void findArac() {
+        System.out.println("Arac Markasi Giriniz.");
+        String marka = ifade();
+        System.out.println("Bulunan Araclar");
+        aracService.findAllByColumnNameAndValue("marka",marka).forEach(a->{
+            System.out.println("Arac id'si -> " + a.getId() +
+                                " - Arac markası -> " + a.getMarka() +
+                                " - Arac modeli -> " + a.getModel() +
+                                " - Arac musait mi -> " + a.isMusaitmi()
+            );
+        });
     }
 
     private String ifade(){

@@ -18,8 +18,6 @@ public class Kiralama {
     Long id;
     @Builder.Default
     boolean kiralamaAktifmi = true;
-    @OneToOne()
-    Arac arac;
-    @OneToOne()
-    Kisi kisi;
+    Long aracId;
+    Long kisiId;
 }

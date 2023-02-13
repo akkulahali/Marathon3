@@ -1,9 +1,11 @@
 package com.ali.Utility;
 
+import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -12,7 +14,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@Getter
 public class MyFactoryRepository<T, ID> implements ICrud<T, ID> {
     private Session ss;
     private Transaction tt;
@@ -38,6 +40,18 @@ public class MyFactoryRepository<T, ID> implements ICrud<T, ID> {
         try {
             openSession();
             ss.save(entity);
+            closeSession();
+            return entity;
+        }catch (Exception e){
+            tt.rollback();
+            throw e;
+        }
+    }
+
+    public <S extends T> S update(S entity) {
+        try {
+            openSession();
+            ss.update(entity);
             closeSession();
             return entity;
         }catch (Exception e){
