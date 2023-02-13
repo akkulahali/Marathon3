@@ -5,7 +5,7 @@
         <!-- Kullanılacak Veritabanı Sürücüsünün Adı       -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <!--  ConnectionString       -->
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/PersonDb</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/AracKiralamaDb</property>
         <!--  Kullanıcı Adı , yetkili kullanıcı      -->
         <property name="hibernate.connection.username">postgres</property>
         <!--  Şifre      -->
@@ -17,7 +17,7 @@
                         DİKKAT!! bir uygulamada create kullanılır ise veritabanında olan veriler tamamen silinir.
               create/drop -> Her seferinde tabolar oluşturulur, uygulama kapatılırken tüm tablolar silinir.
          -->
-        <property name="hibernate.hbm2ddl.auto">create-drop</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
         <!--  Hibernate bizim adımıza SQL komutlarını yazmaktadır, bu yazmakta olduğu SQL kodlarını
               konsol ekranında görebilmek için bunu aktif ederiz.
         -->
@@ -27,12 +27,9 @@
                 DİKKAT!! kafanıza göre her sınıfı haritalayamazsınız. çünkü hibernate
                 @Entity ile işaretlenmemiş hiç bir sınıfı kullanamaz.
         -->
-        <mapping class="com.ali.repository.entity.Person"></mapping>
-        <mapping class="com.ali.repository.entity.Address"></mapping>
-        <mapping class="com.ali.repository.entity.Department"></mapping>
-        <mapping class="com.ali.repository.entity.Car"></mapping>
-
-
+        <mapping class="com.ali.repository.entity.Arac"></mapping>
+        <mapping class="com.ali.repository.entity.Kiralama"></mapping>
+        <mapping class="com.ali.repository.entity.Kisi"></mapping>
 
     </session-factory>
 </hibernate-configuration>
